@@ -30,6 +30,6 @@ int main() {
     data[i] = num;
   }
   printData(N, data);
-
+  free(data);
   return 0;
 }
