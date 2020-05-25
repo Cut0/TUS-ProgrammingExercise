@@ -1,0 +1,193 @@
+ew IM df:11:86:29:a8:50
+New IM ce:66:d3:9b:d8:6a
+New IM d1:75:21:21:f5:de
+New IM f1:71:3c:fa:52:6e
+New IM e2:d4:38:72:af:96
+New IM f1:f0:b8:08:12:cd
+New IM cc:d0:16:70:46:3c
+BTLE Exception while connect on  df:11:86:29:a8:50
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral df:11:86:29:a8:50, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  ce:66:d3:9b:d8:6a
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral ce:66:d3:9b:d8:6a, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:71:3c:fa:52:6e
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f1:71:3c:fa:52:6e, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  e2:d4:38:72:af:96
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e2:d4:38:72:af:96, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:f0:b8:08:12:cd
+BTLE Exception while connect on  d1:75:21:21:f5:de
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral d1:75:21:21:f5:de, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral f1:f0:b8:08:12:cd, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:f0:b8:08:12:cd
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f1:f0:b8:08:12:cd, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f1:f0:b8:08:12:cd'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  df:11:86:29:a8:50
+BTLE Exception while connect on  ce:66:d3:9b:d8:6a
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e2:d4:38:72:af:96
+args:('Failed to connect to peripheral df:11:86:29:a8:50, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['df:11:86:29:a8:50'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:71:3c:fa:52:6e
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  cc:d0:16:70:46:3c
+args:('Failed to connect to peripheral ce:66:d3:9b:d8:6a, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['ce:66:d3:9b:d8:6a'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral e2:d4:38:72:af:96, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e2:d4:38:72:af:96'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f1:71:3c:fa:52:6e, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f1:71:3c:fa:52:6e'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  d1:75:21:21:f5:de
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral d1:75:21:21:f5:de, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['d1:75:21:21:f5:de'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral cc:d0:16:70:46:3c, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['cc:d0:16:70:46:3c'], 'mtu': [0], 'sec': ['low']})
+New IM d1:44:a4:ae:da:d7
+New IM e3:2b:18:0a:98:8e
+New IM f3:e0:48:09:ad:b8
+New IM e1:bd:01:27:84:cb
+New IM e2:56:b8:68:d2:9c
+New IM f3:7a:20:e8:a1:7d
+New IM c3:32:06:72:63:8c
+New IM c1:40:ea:fc:93:90
+New IM ff:3c:03:91:cd:1c
+BTLE Exception while connect on  cc:d0:16:70:46:3c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral cc:d0:16:70:46:3c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  cc:d0:16:70:46:3c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral cc:d0:16:70:46:3c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+New IM e2:7f:44:e4:c1:e0
+New IM c2:8b:76:69:b4:3e
+New IM dc:4c:af:4c:1f:3e
+BTLE Exception while connect on  d1:44:a4:ae:da:d7
+BTLE Exception while connect on  c1:40:ea:fc:93:90
+BTLE Exception while connect on  df:11:86:29:a8:50
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  ff:3c:03:91:cd:1c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral ff:3c:03:91:cd:1c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f3:7a:20:e8:a1:7d
+BTLE Exception while connect on  c2:8b:76:69:b4:3e
+BTLE Exception while connect on  ce:66:d3:9b:d8:6a
+args:('Failed to connect to peripheral d1:44:a4:ae:da:d7, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:71:3c:fa:52:6e
+BTLE Exception while connect on  e2:d4:38:72:af:96
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral c1:40:ea:fc:93:90, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e3:2b:18:0a:98:8e
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  d1:75:21:21:f5:de
+BTLE Exception while connect on  f3:e0:48:09:ad:b8
+BTLE Exception while connect on  cc:d0:16:70:46:3c
+BTLE Exception while connect on  dc:4c:af:4c:1f:3e
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral df:11:86:29:a8:50, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e1:bd:01:27:84:cb
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral ce:66:d3:9b:d8:6a, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e2:d4:38:72:af:96, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e1:bd:01:27:84:cb, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  e2:56:b8:68:d2:9c
+BTLE Exception while connect on  e2:7f:44:e4:c1:e0
+BTLE Exception while connect on  c3:32:06:72:63:8c
+args:('Failed to connect to peripheral f1:71:3c:fa:52:6e, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral c2:8b:76:69:b4:3e, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral e3:2b:18:0a:98:8e, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e2:56:b8:68:d2:9c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f1:f0:b8:08:12:cd
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral dc:4c:af:4c:1f:3e, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral d1:75:21:21:f5:de, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f3:7a:20:e8:a1:7d, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral f3:e0:48:09:ad:b8, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral cc:d0:16:70:46:3c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral f1:f0:b8:08:12:cd, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral c3:32:06:72:63:8c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral e2:7f:44:e4:c1:e0, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while scannning.
+BTLE Exception while connect on  f3:7a:20:e8:a1:7d
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f3:7a:20:e8:a1:7d, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f3:7a:20:e8:a1:7d'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  f3:e0:48:09:ad:b8
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f3:e0:48:09:ad:b8, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f3:e0:48:09:ad:b8'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  d1:44:a4:ae:da:d7
+BTLE Exception while connect on  c1:40:ea:fc:93:90
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e2:7f:44:e4:c1:e0
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  cc:d0:16:70:46:3c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e1:bd:01:27:84:cb
+BTLE Exception while connect on  f1:f0:b8:08:12:cd
+BTLE Exception while connect on  ff:3c:03:91:cd:1c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral d1:44:a4:ae:da:d7, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['d1:44:a4:ae:da:d7'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  c2:8b:76:69:b4:3e
+BTLE Exception while connect on  f1:71:3c:fa:52:6e
+args:('Failed to connect to peripheral cc:d0:16:70:46:3c, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['cc:d0:16:70:46:3c'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral c1:40:ea:fc:93:90, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['c1:40:ea:fc:93:90'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  e3:2b:18:0a:98:8e
+BTLE Exception while connect on  ce:66:d3:9b:d8:6a
+BTLE Exception while connect on  df:11:86:29:a8:50
+BTLE Exception while connect on  dc:4c:af:4c:1f:3e
+BTLE Exception while connect on  c3:32:06:72:63:8c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral c2:8b:76:69:b4:3e, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['c2:8b:76:69:b4:3e'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral e2:7f:44:e4:c1:e0, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e2:7f:44:e4:c1:e0'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  d1:75:21:21:f5:de
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral c3:32:06:72:63:8c, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['c3:32:06:72:63:8c'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral ff:3c:03:91:cd:1c, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['ff:3c:03:91:cd:1c'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e1:bd:01:27:84:cb, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e1:bd:01:27:84:cb'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  e2:56:b8:68:d2:9c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e2:56:b8:68:d2:9c, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e2:56:b8:68:d2:9c'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral e3:2b:18:0a:98:8e, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e3:2b:18:0a:98:8e'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral ce:66:d3:9b:d8:6a, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['ce:66:d3:9b:d8:6a'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  e2:d4:38:72:af:96
+args:('Failed to connect to peripheral d1:75:21:21:f5:de, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['d1:75:21:21:f5:de'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral f1:71:3c:fa:52:6e, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f1:71:3c:fa:52:6e'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral f1:f0:b8:08:12:cd, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['f1:f0:b8:08:12:cd'], 'mtu': [0], 'sec': ['low']})
+args:('Failed to connect to peripheral df:11:86:29:a8:50, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['df:11:86:29:a8:50'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral e2:d4:38:72:af:96, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['e2:d4:38:72:af:96'], 'mtu': [0], 'sec': ['low']})
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral dc:4c:af:4c:1f:3e, addr type: random', {'rsp': ['stat'], 'state': ['scan'], 'dst': ['dc:4c:af:4c:1f:3e'], 'mtu': [0], 'sec': ['low']})
+New IM ca:62:c9:31:43:87
+BTLE Exception while connect on  ff:3c:03:91:cd:1c
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral ff:3c:03:91:cd:1c, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  e2:7f:44:e4:c1:e0
+BTLE Exception while connect on  f1:f0:b8:08:12:cd
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+args:('Failed to connect to peripheral f1:f0:b8:08:12:cd, addr type: random', {'rsp': ['stat'], 'state': ['disc'], 'mtu': [0], 'sec': ['low']})
+BTLE Exception while connect on  c1:40:ea:fc:93:90
+BTLE Exception while connect on  f3:7a:20:e8:a1:7d
+BTLE Exception while connect on  d1:75:21:21:f5:de
+BTLE Exception while connect on  e1:bd:01:27:84:cb
+type:<class 'bluepy.btle.BTLEDisconnectError'>
+BTLE Exception while connect on  d1:44:a4:ae:da:d7
