@@ -10,10 +10,10 @@ struct node         /* 構造体 node の定義 */
 };
 /* 関数 tree_search, tree_minimum, tree_insert の宣言 */
 void printParams(struct node *T);
-void inorder_tree_walk(struct node *T, struct node *x);
-struct node *tree_search(struct node *T, struct node *x, int a);
-struct node *tree_minimum(struct node *T, struct node *x);
-struct node *tree_maximum(struct node *T, struct node *x);
+void inorder_tree_walk(struct node *x);
+struct node *tree_search(struct node *x, int a);
+struct node *tree_minimum(struct node *x);
+struct node *tree_maximum(struct node *x);
 struct node *tree_insert(struct node *T, struct node *x);
 struct node *tree_delete(struct node *T, struct node *z);
 
@@ -52,7 +52,7 @@ int main(void) {
   free(x);
   for (i = 0; i < N; i++) {
     x = (struct node *)malloc(sizeof(struct node));
-    x = tree_search(Tree, Tree, Data[i]);
+    x = tree_search(Tree, Data[i]);
     Tree = tree_delete(Tree, x);
     printParams(Tree);
   }
@@ -63,11 +63,11 @@ int main(void) {
 void printParams(struct node *T) {
   if (T != NULL) {
     printf("keys in tree:");
-    inorder_tree_walk(T, T);
+    inorder_tree_walk(T);
     printf(" Min:");
-    printf("%d", tree_minimum(T, T)->key);
+    printf("%d", tree_minimum(T)->key);
     printf(" Max:");
-    printf("%d\n", tree_maximum(T, T)->key);
+    printf("%d\n", tree_maximum(T)->key);
   } else {
     printf("keys in tree: NULL");
     printf(" Min:");
@@ -77,15 +77,15 @@ void printParams(struct node *T) {
   }
 }
 
-void inorder_tree_walk(struct node *T, struct node *x) {
+void inorder_tree_walk(struct node *x) {
   if (x != NULL) {
-    inorder_tree_walk(T, x->left);
+    inorder_tree_walk(x->left);
     printf(" %d,", x->key);
-    inorder_tree_walk(T, x->right);
+    inorder_tree_walk(x->right);
   }
 }
 
-struct node *tree_search(struct node *T, struct node *x, int a) {
+struct node *tree_search(struct node *x, int a) {
   while (x != NULL && x->key != a) {
     if (a < x->key)
       x = x->left;
@@ -95,7 +95,7 @@ struct node *tree_search(struct node *T, struct node *x, int a) {
   return x;
 }
 
-struct node *tree_minimum(struct node *T, struct node *x) {
+struct node *tree_minimum(struct node *x) {
   struct node *y = NULL;
   while (x != NULL) {
     y = x;
@@ -104,7 +104,7 @@ struct node *tree_minimum(struct node *T, struct node *x) {
   return y;
 }
 
-struct node *tree_maximum(struct node *T, struct node *x) {
+struct node *tree_maximum(struct node *x) {
   struct node *y = NULL;
   while (x != NULL) {
     y = x;
@@ -149,7 +149,7 @@ struct node *tree_delete(struct node *T, struct node *z) {
   if (z->right == NULL || z->left == NULL)
     y = z;
   else
-    y = tree_minimum(T, z->right);
+    y = tree_minimum(z->right);
   p = y->parent;
   if (y->right != NULL) {
     x = y->right;
