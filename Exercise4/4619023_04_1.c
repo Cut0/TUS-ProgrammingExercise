@@ -56,6 +56,7 @@ int main(void) {
     Tree = tree_delete(Tree, x);
     printParams(Tree);
   }
+  free(x);
   free(Tree);
   return 0;
 }
@@ -168,6 +169,5 @@ struct node *tree_delete(struct node *T, struct node *z) {
       p->right = x;
   }
   if (y != z) z->key = y->key;
-  free(y);
   return r;
 }
