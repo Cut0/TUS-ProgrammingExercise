@@ -4,9 +4,13 @@
 #include <string.h> /* 文字列関数を扱えるようにする */
 /* 関数 parent, heapsort の宣言，他の関数も宣言すること */
 int parent(int i);
-void heapSort(int *a, int length);
-void downheap(int k, int r, int *a);
-void swap(int i, int j, int *a);
+int left(int i);
+int right(int i);
+void heapSort(int *H, int *A, int n);
+void buildHeap(int *H, int *A, int n);
+void insert(int *H, int i, int a);
+void upHeapSort(int *H, int i);
+void downHeapSort(int *H, int i);
 int main(void) {
   int i;
   int Data[50]; /* 数値を格納する配列， 50 まで */
@@ -33,42 +37,61 @@ int main(void) {
     printf("%d ", Data[i]); /* ソート前の数値の出力 */
   }
   printf("\n");
-  heapSort(Data, N); /* ヒープソートを呼ぶ */
+  heapSort(Heap, Data, N); /* ヒープソートを呼ぶ */
   for (i = 0; i < N; i++) {
     printf("%d ", Data[i]); /* ソート後の数値の出力 */
   }
   printf("\n");
+  return 0;
 }
-void heapSort(int *a, int length) {  // ヒープソート(昇順)
-  for (int i = (length - 2) / 2; i >= 0; i--) {
-    downheap(i, length - 1, a);
+int parent(int i) { return (i - 1) / 2; }
+int left(int i) { return 2 * i + 1; }
+int right(int i) { return 2 * i + 2; }
+void heapSort(int *H, int *A, int n) {
+  int i;
+  buildHeap(H, A, n);
+  for (i = 1; i < n; i++) {
+    A[n - i] = H[0];
+    H[0] = H[n - i];
+    downHeapSort(H, n - i - 1);
   }
-  for (int i = length - 1; i > 0; i--) {
-    swap(0, i, a);
-    downheap(0, i - 1, a);
+  A[0] = H[0];
+}
+void buildHeap(int *H, int *A, int n) {
+  int i = 0;
+  for (i = 0; i < n; i++) {
+    insert(H, i, A[i]);
   }
 }
-
-void downheap(int k, int r, int *a) {
-  int j, v;
-  v = a[k];
+void insert(int *H, int i, int a) {
+  H[i] = a;
+  upHeapSort(H, i);
+}
+void upHeapSort(int *H, int i) {
+  int u = i;
+  while (u > 0 && H[parent(u)] < H[u]) {
+    int tmp = H[parent(u)];
+    H[parent(u)] = H[u];
+    H[u] = tmp;
+    u = parent(u);
+  }
+}
+void downHeapSort(int *H, int i) {
+  int u = 0;
   while (true) {
-    j = 2 * k + 1;
-    if (j > r) break;
-    if (j != r) {
-      if (a[j + 1] > a[j]) {
-        j = j + 1;
-      }
-    }
-    if (v >= a[j]) break;
-    a[k] = a[j];
-    k = j;
+    int l = left(u) <= i ? left(u) : u;
+    int r = right(u) <= i ? right(u) : u;
+    if (H[l] > H[u] && H[l] >= H[r]) {
+      int tmp = H[u];
+      H[u] = H[l];
+      H[l] = tmp;
+      u = l;
+    } else if (H[r] > H[u] && H[l] <= H[r]) {
+      int tmp = H[u];
+      H[u] = H[r];
+      H[r] = tmp;
+      u = r;
+    } else
+      break;
   }
-  a[k] = v;
-}
-
-void swap(int i, int j, int *a) {  // 要素の交換
-  int tmp = a[i];
-  a[i] = a[j];
-  a[j] = tmp;
 }

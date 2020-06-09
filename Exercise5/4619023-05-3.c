@@ -10,7 +10,6 @@ void swap(int i, int j, int *a);
 int main(void) {
   int i;
   int Data[50]; /* 数値を格納する配列， 50 まで */
-  int Heap[50]; /* ヒープを表す補助配列 */
   int N;        /* N やループで用いる int 型変数 */
   char fname[128];
   FILE *fp; /* ファイル名の変数など必要なものを宣言 */
@@ -67,7 +66,7 @@ void downheap(int k, int r, int *a) {
   a[k] = v;
 }
 
-void swap(int i, int j, int *a) {  // 要素の交換
+void swap(int i, int j, int *a) {
   int tmp = a[i];
   a[i] = a[j];
   a[j] = tmp;
