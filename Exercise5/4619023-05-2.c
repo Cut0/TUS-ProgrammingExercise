@@ -40,7 +40,6 @@ int main(void) {
   }
   printf("\n");
   heapSort(Heap, Data, N); /* ヒープソートを呼ぶ */
-  printf("\nnum");
   for (i = 0; i < N; i++) {
     printf("%d ", Data[i]); /* ソート後の数値の出力 */
   }
@@ -75,6 +74,7 @@ void changeHeapMsg(int *H) {
       break;
   }
   increase_key(H, i, a);
+  printf("\n");
 }
 void increase_key(int *H, int i, int a) {
   H[i] = a;
