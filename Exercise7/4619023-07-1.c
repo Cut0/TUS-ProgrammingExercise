@@ -49,16 +49,20 @@ int main(void) {
   }
   printf("\n");
   bucket_sort(Data, N, l, u, m); /* bucket_sort を 呼び出し */
+  printf("ソートされたデータ: ");
   for (i = 0; i < N; i++) {
+    printf("[%d]", Data[i]);
   }
+  return 0;
 }
 
 void bucket_sort(int *A, int n, int l, int u, int m) {
   struct cell List[50]; /* リストを格納する配列 */
   int B[50];            /* バケットを表す配列 */
   int i, j;
+  int pos = 0;
   int T[m + 1];
-
+  T[0] = 0;
   for (i = 0; i < n; i++) { /* あらかじめ n 個の数値をリストに格納 */
     List[i].key = A[i]; /* next の値を初期化 */
     List[i].next = -1;
@@ -66,35 +70,18 @@ void bucket_sort(int *A, int n, int l, int u, int m) {
   for (j = 0; j < m; j++) { /* バケットを初期化 */
     B[j] = -1;
   }
-  for (j = 0; j <= m; j++) { /* バケットを初期化 */
+  for (j = 0; j <= m; j++) { /* Tを初期化 */
     T[j] = -1;
   }
-  for (i = 0; i < m; i++) {
-    int pos = n * List[i].key / (u - l);
-    if (B[pos] >= 0 && B[pos] < n) {
+  //作成
+  for (i = 0; i < n; i++) {
+    int pos = (m * A[i]) / (u - l);
+    if (B[pos] >= 0 && B[pos] <= n) {
       List[i].next = B[pos];
     }
     B[pos] = i;
   }
-  printf("A\n");
-  for (i = 0; i < 10; i++) {
-    printf("%d ", A[i]);
-  }
-  printf("\n");
-  printf("B\n");
-  for (i = 0; i < 10; i++) {
-    printf("%d ", B[i]);
-  }
-  printf("\n");
-  printf("L\n");
-  for (i = 0; i < 10; i++) {
-    printf("%d ", List[i].key);
-    printf("%d\n", List[i].next);
-  }
-  printf("\n");
-
-  int pos = 0;
-  T[0] = 0;
+  //ソート
   for (i = 0; i < m; i++) {
     if (B[i] != -1) {
       A[pos] = List[B[i]].key;
@@ -108,10 +95,16 @@ void bucket_sort(int *A, int n, int l, int u, int m) {
     }
     T[i + 1] = pos;
   }
-  printf("\n");
-  printf("A\n");
-  for (i = 0; i < 11; i++) {
-    printf("%d ", T[i]);
+
+  for (j = 0; j < m; j++) {
+    for (i = 1 + T[j]; i < T[j + 1]; i++) {
+      int a = A[i];
+      int h = i - 1;
+      while (h >= 0 && A[h] > a) {
+        A[h + 1] = A[h];
+        h = h - 1;
+        A[h + 1] = a;
+      }
+    }
   }
-  printf("\n");
 }
