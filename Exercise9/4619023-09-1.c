@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 void quicksort(int *A, int p, int r);
-int partition(int *A, int p, int r);
+int partition(int *A, int, int);
 int main(void) {
   int Data[50]; /* 入力数値の配列，数値数は 50 まで */
   int N;
