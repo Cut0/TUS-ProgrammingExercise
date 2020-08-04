@@ -54,6 +54,12 @@ void heapSort(int *H, int *A, int n) {
     A[n - i] = H[0];
     H[0] = H[n - i];
     downHeapSort(H, n - i - 1);
+    printf("%d回目\n", i);
+    int j = 0;
+    for (j = 0; j < n - i; j++) {
+      printf("%d ", H[j]); /* ソート後の数値の出力 */
+    }
+    printf("\n");
   }
   A[0] = H[0];
 }

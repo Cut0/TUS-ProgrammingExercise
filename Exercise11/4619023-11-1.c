@@ -29,7 +29,7 @@ int main() {
   fgets(fname, sizeof(fname), stdin); /* 標準入力からファイル名を取得 */
   fname[strlen(fname) - 1] = '\0'; /* 最後の改行コードを除去 */
   fflush(stdin); /* 128文字を超えた入力を標準入力から捨てる */
-  fp = fopen("graph1.txt", "r"); /* ファイルを読み込みモードで開く */
+  fp = fopen(fname, "r"); /* ファイルを読み込みモードで開く */
   fscanf(fp, "%d %d", &N, &M);
   if (N > maxN) {
     printf("N is too large, setting N = %d\n", maxN);
@@ -78,6 +78,17 @@ int main() {
     loop = false;
     for (i = 0; i < N; i++)
       if (A[i] == 1) loop = true;
+
+    for (u = 0; u < N; u++) {
+      if (d[u] == inf)
+        printf("vertex %d: d[%d]=inf, p[%d]=%d\n", u, u, u, p[u]);
+      else
+        printf("vertex %d: d[%d]=%d, p[%d]=%d\n", u, u, d[u], u, p[u]);
+    }
+    for (u = 0; u < N; u++) {
+      printf("%d", A[u]);
+    }
+    printf("\n\n");
   }
 
   for (u = 0; u < N; u++) {

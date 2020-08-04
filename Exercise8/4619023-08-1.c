@@ -63,6 +63,7 @@ void counting_sort(int *A, int n, int k) {
   for (i = n - 1; i >= 0; i--) {
     b[c[A[i]] - 1] = A[i];
     c[A[i]] = c[A[i]] - 1;
+    printf("[%d]", c[A[i]] - 1);
   }
   for (i = 0; i < n; i++) A[i] = b[i];
 }
