@@ -51,7 +51,7 @@ int main() {
   d[v0] = 0;
   A[v0] = 1;
   bool loop = true;
-
+  int count = 1;
   while (loop) {
     int num = inf;
     int pos = 0;
@@ -78,7 +78,8 @@ int main() {
     loop = false;
     for (i = 0; i < N; i++)
       if (A[i] == 1) loop = true;
-
+    printf("%d回目\n", count);
+    count += 1;
     for (u = 0; u < N; u++) {
       if (d[u] == inf)
         printf("vertex %d: d[%d]=inf, p[%d]=%d\n", u, u, u, p[u]);

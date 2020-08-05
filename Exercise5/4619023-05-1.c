@@ -50,12 +50,17 @@ int right(int i) { return 2 * i + 2; }
 void heapSort(int *H, int *A, int n) {
   int i;
   buildHeap(H, A, n);
+  int j = 0;
+  printf("build-heap\n");
+  for (j = 0; j < n; j++) {
+    printf("%d ", H[j]); /* ソート後の数値の出力 */
+  }
+  printf("\n取り出し\n");
   for (i = 1; i < n; i++) {
     A[n - i] = H[0];
     H[0] = H[n - i];
     downHeapSort(H, n - i - 1);
     printf("%d回目\n", i);
-    int j = 0;
     for (j = 0; j < n - i; j++) {
       printf("%d ", H[j]); /* ソート後の数値の出力 */
     }
