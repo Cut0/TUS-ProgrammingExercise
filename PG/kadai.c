@@ -1,5 +1,4 @@
 //学籍番号: 4619023 氏名:　加藤　零
-#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,11 +6,10 @@
 #include <time.h>
 #include <unistd.h>
 #define W 4 /* W = 二進数で表した時のけたの最大長さ，ここでは 10 に設定 */
-#define m 200000 /* m = ハッシュ表のサイズ，ここでは 97 に設定 */
+#define m 100000 /* m = ハッシュ表のサイズ，ここでは 97 に設定 */
 #define l 16
 #define maxN 1000000
 #define maxCell 200000
-#define inf INT_MAX
 int head = 0, tail = 0;
 
 typedef struct Cell {
@@ -21,18 +19,19 @@ typedef struct Cell {
   unsigned int state : 1;  // 0が空で，1が既に占有されている
 } Cell;
 
-void enqueue(int *A, int a);
-int dequeue(int *A);
-int hashSearch(Cell *B, int key);
-void hashInsert(Cell *B, Cell Cell);
-int hashVal(int num);
-int powN(int a, int b);
-int toDecimal(int *board);
-void toBinary(int num, int *board);
-int pieceCount(int boardNum);
-int findNextBoards(int currentBoard, int *board);
-
-void testBoardNum(int boardNum);
+void enqueue(int *A, int a);  //キューに挿入する関数
+int dequeue(int *A);          //キューの先頭を取り出す関数
+int hashSearch(Cell *B,
+               int key);  // keyに一致する要素の場所を返す関数
+void hashInsert(Cell *B, Cell Cell);  // cellを表に挿入する関数
+int hashVal(int num);                 //ハッシュ値を返す関数
+int powN(int a, int b);               // aのb乗を返す関数
+int toDecimal(int *board);            // boardを10進数に変換する関数
+void toBinary(int num, int *board);   //数値をboardに変換する関数
+int pieceCount(int boardNum);  //ボードの値から駒の数を求める関数
+int findNextBoards(int currentBoard,
+                   int *board);  //次の盤面をboardに入れて盤面の数を返す関数
+void printBoard(Cell cell);  // cellの内容を表示する関数
 
 int main() {
   int board[16];           // 2進数で配置を保存する配列
@@ -73,20 +72,13 @@ int main() {
   }
 
   Cell last = leaf;
-  while (leaf.parent != -1) {
-    testBoardNum(leaf.key);
+  while (true) {
+    printBoard(leaf);
+    if (leaf.parent == -1) break;
     int pos = hashSearch(B, leaf.parent);
     leaf = B[pos];
   }
 
-  /*
-  for (i = 0; i < maxCell; i++) {
-    if (B[i].state == 1) {
-      printf("%d ", B[i].key);
-      printf("%d\n", B[i].state);
-    }
-  }
-  */
   return 0;
 }
 
@@ -306,10 +298,11 @@ int findNextBoards(int num, int *nextBoards) {
   return count;
 }
 
-void testBoardNum(int boardNum) {
+void printBoard(Cell cell) {
+  printf("value = %d, #pieces = %d\n", cell.key, pieceCount(cell.key));
   int i, j;
   int board[16];
-  toBinary(boardNum, board);
+  toBinary(cell.key, board);
   for (i = 0; i < 4; i++) {
     for (j = 0; j < 4; j++) {
       printf("%d ", board[i * 4 + j]);
