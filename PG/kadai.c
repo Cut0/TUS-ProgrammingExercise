@@ -25,14 +25,13 @@ void enqueue(int *A, int a);
 int dequeue(int *A);
 int hashSearch(Cell *B, int key);
 void hashInsert(Cell *B, Cell Cell);
-int hashVal(int a);
+int hashVal(int num);
 int powN(int a, int b);
 int toDecimal(int *board);
 void toBinary(int num, int *board);
 int pieceCount(int boardNum);
 int findNextBoards(int currentBoard, int *board);
 
-void testBoard(int *board);
 void testBoardNum(int boardNum);
 
 int main() {
@@ -91,6 +90,7 @@ int main() {
   return 0;
 }
 
+//キュー系をまとめた------------------------------------------------------------
 void enqueue(int *A, int a) {
   A[tail] = a;
   tail += 1;
@@ -113,6 +113,7 @@ int dequeue(int *A) {
     return a;
   }
 }
+//--------------------------------------------------------------------------
 
 //ハッシュ系をまとめた------------------------------------------------------------
 int hashSearch(Cell *B, int key) {
@@ -148,13 +149,13 @@ void hashInsert(Cell *B, Cell cell) {
   }
 }
 
-int hashVal(int a) {
+int hashVal(int num) {
   int i = 0, h = 0;
   for (i = W; i > 0; i--) {
-    h += a / powN(10, i);
-    a = a % powN(10, i);
+    h += num / powN(10, i);
+    num = num % powN(10, i);
   }
-  h += a;
+  h += num;
   return h % m;
 }
 //-------------------------------------------------------------------------
@@ -170,9 +171,7 @@ int toDecimal(int *board) {
 
 void toBinary(int num, int *board) {
   int i, base = 1;
-  for (i = 0; i < l; i++) {
-    board[i] = 0;
-  }
+  for (i = 0; i < l; i++) board[i] = 0;
   int count = 0;
   while (num > 0) {
     board[count] = (num % 2);
@@ -206,7 +205,6 @@ int findNextBoards(int num, int *nextBoards) {
   int i = 0;
   int currentBoard[16];
   toBinary(num, currentBoard);
-  testBoard(currentBoard);
   //横に探索
   for (i = 0; i < 4; i++) {
     // 0011配置
@@ -306,17 +304,6 @@ int findNextBoards(int num, int *nextBoards) {
     }
   }
   return count;
-}
-
-void testBoard(int *board) {
-  int i, j;
-  for (i = 0; i < 4; i++) {
-    for (j = 0; j < 4; j++) {
-      printf("%d ", board[i * 4 + j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
 }
 
 void testBoardNum(int boardNum) {
