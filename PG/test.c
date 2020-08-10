@@ -8,24 +8,15 @@
 #include <time.h>
 #include <unistd.h>
 #define W 5
-int hashVal(int a) {
-  int i = 0, h = 0;
-  for (i = W; i > 0; i--) {
-    h += a / pow(10, i);
-    printf("%d:", (int)pow(10, i));
-    printf("%d\n", (int)(a / pow(10, i)));
-    a = a % (int)pow(10, i);
+int powN(int a, int b) {
+  int i, result = 1;
+  for (i = 0; i < b; i++) {
+    result = result * a;
   }
-  h += a;
-  return h;
+  return result;
 }
-typedef struct Cell {
-  int key;
-  int dist;
-  int parent;
-  int next;
-} Cell;
 int main() {
-  printf("%d", hashVal(2115));
+  int num = powN(0, 2);
+  printf("%d", num);
   return 0;
 }
