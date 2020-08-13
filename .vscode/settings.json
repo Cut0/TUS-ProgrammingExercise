@@ -1,9 +1,0 @@
-{
-  "files.associations": {
-    "*.vue": "vue",
-    "*.erb": "erb",
-    "*.asm": "asm-collection",
-    "bitset": "c",
-    "algorithm": "c"
-  }
-}
