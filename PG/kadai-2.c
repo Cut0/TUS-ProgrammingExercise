@@ -4,7 +4,7 @@
 #define m 2115 /* m = ハッシュ表のサイズ */
 #define l 16
 #define maxN 3735
-#define maxCell 2117
+#define maxCell 2115
 int head = 0, tail = 0;
 int powDi[17] = {
     1,   2,    4,    8,    16,   32,    64,    128,  256,
@@ -24,12 +24,13 @@ int hash_search(Cell *B,
                 int key);  // keyに一致する要素の場所を返す関数
 void hash_insert(Cell *B, Cell Cell);  // cellを表に挿入する関数
 int hash_value(int num);               //ハッシュ値を返す関数
-void to_binary(int num, int *board);   //数値をboardに変換する関数
+void to_binary(int num, int *board);  //数値をboard(2進数)に変換する関数
 int piece_count(int boardNum);  //ボードの値から駒の数を求める関数
-int rotate_board(int num);  //盤面を90度回転して結果の数値を返す関数
+int rotate_board(int num);  //盤面を右に90度回転して結果の数値を返す関数
 int mirror_board(int num);  //盤面を左右で反転させる関数
-int find_next_boards(int currentBoard,
-                     int *board);  //次の盤面をboardに入れて盤面の数を返す関数
+int find_next_boards(
+    int currentBoard,
+    int *nextBoardNums);  //次の盤面をboardに入れて盤面の数を返す関数
 void print_board(int num);  // cellの内容を表示する関数
 
 int main() {
@@ -42,7 +43,6 @@ int main() {
     int pieceCounts[3] = {0, 0, 0};
     int i, j;
 
-    // Aが空なら終了
     for (j = 0; j < 3; j++) {
         // BFSの初期設定
         head = 0, tail = 0;
@@ -53,18 +53,19 @@ int main() {
         enqueue(A, startNum);
         Cell startCell = {startNum, 0, -1, 1};
         hash_insert(Bn[j], startCell);
+        // Aが空なら終了
         while (head != tail) {
-            int nextBoards[l];
+            int nextBoardNums[l];
             int currentBoardNum = dequeue(A);
             //ここで現在のセルの隣接頂点を求める
-            int nextCount = find_next_boards(currentBoardNum, nextBoards);
+            int nextCount = find_next_boards(currentBoardNum, nextBoardNums);
             //隣接頂点それぞれに対しBになければAとBにinsertを繰り返す
             for (i = 0; i < nextCount; i++) {
-                int pieceCount = piece_count(nextBoards[i]);
-                Cell nextCell = {nextBoards[i], 15 - pieceCount,
+                int pieceCount = piece_count(nextBoardNums[i]);
+                Cell nextCell = {nextBoardNums[i], 15 - pieceCount,
                                  currentBoardNum, 1};
-                if (hash_search(Bn[j], nextBoards[i]) == -1) {
-                    enqueue(A, nextBoards[i]);
+                if (hash_search(Bn[j], nextBoardNums[i]) == -1) {
+                    enqueue(A, nextBoardNums[i]);
                     hash_insert(Bn[j], nextCell);
                     if (minpieceCount > pieceCount) {
                         lastBoardCell[j] = nextCell;
@@ -132,12 +133,11 @@ void enqueue(int *A, int a) {
 }
 
 int dequeue(int *A) {
-    int a;
     if (head == tail) {
         printf("queue underflow\n");
         exit(1);
     } else {
-        a = A[head];
+        int a = A[head];
         A[head] = -1;
         head += 1;
         if (head == maxN) head = 0;
@@ -179,14 +179,8 @@ void hash_insert(Cell *B, Cell cell) {
 }
 
 int hash_value(int num) {
-    int i = 0, h = 0;
-    for (i = W; i > 0; i--) {
-        int powI = powDeca[i];
-        h += num / powI;
-        num = num % powI;
-    }
-    h += num;
-    return h % m;
+    //ハッシュ関数まだ作ってません
+    return num;
 }
 //-------------------------------------------------------------------------
 
@@ -236,7 +230,7 @@ int mirror_board(int num) {
 }
 
 // boardのsizeは16がmax
-int find_next_boards(int num, int *nextBoards) {
+int find_next_boards(int num, int *nextBoardNums) {
     int count = 0;
     int i = 0;
     int currentBoard[l];
@@ -251,45 +245,45 @@ int find_next_boards(int num, int *nextBoards) {
         // 0011配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 0 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoards[count] = num - (pos1 + pos3);
+            nextBoardNums[count] = num - (pos1 + pos3);
             count += 1;
         }
         // 0111配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoards[count] = num - (pos0 + pos2);
+            nextBoardNums[count] = num - (pos0 + pos2);
             count += 1;
         }
         // 1011配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 0 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoards[count] = num - (pos1 + pos3);
+            nextBoardNums[count] = num - (pos1 + pos3);
             count += 1;
         }
         // 1100配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 0 && currentBoard[i * 4 + 3] == 0) {
-            nextBoards[count] = num + pos0;
+            nextBoardNums[count] = num + pos0;
             count += 1;
         }
         // 1101配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 0 && currentBoard[i * 4 + 3] == 1) {
-            nextBoards[count] = num + pos0;
+            nextBoardNums[count] = num + pos0;
             count += 1;
         }
         // 1110配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 0) {
-            nextBoards[count] = num + pos1;
+            nextBoardNums[count] = num + pos1;
             count += 1;
         }
 
         // 0110配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 0) {
-            nextBoards[count] = num + pos1;
-            nextBoards[count + 1] = num - (pos0 + pos2);
+            nextBoardNums[count] = num + pos1;
+            nextBoardNums[count + 1] = num - (pos0 + pos2);
             count += 2;
         }
     }
@@ -302,44 +296,44 @@ int find_next_boards(int num, int *nextBoards) {
         int pos3 = powDi[i + 12];
         if (currentBoard[i] == 0 && currentBoard[i + 4] == 0 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 1) {
-            nextBoards[count] = num - (pos2 + pos3 - pos1);
+            nextBoardNums[count] = num - (pos2 + pos3 - pos1);
             count += 1;
         }
         // 0111配置
         if (currentBoard[i] == 0 && currentBoard[i + 4] == 1 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 1) {
-            nextBoards[count] = num - (pos1 + pos2 - pos0);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos0);
             count += 1;
         }
         // 1011配置
         if (currentBoard[i] == 1 && currentBoard[i + 4] == 0 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 1) {
-            nextBoards[count] = num - (pos2 + pos3 - pos1);
+            nextBoardNums[count] = num - (pos2 + pos3 - pos1);
             count += 1;
         }
         // 1100配置
         if (currentBoard[i] == 1 && currentBoard[i + 4] == 1 &&
             currentBoard[i + 8] == 0 && currentBoard[i + 12] == 0) {
-            nextBoards[count] = num - (pos0 + pos1 - pos2);
+            nextBoardNums[count] = num - (pos0 + pos1 - pos2);
             count += 1;
         }
         // 1101配置
         if (currentBoard[i] == 1 && currentBoard[i + 4] == 1 &&
             currentBoard[i + 8] == 0 && currentBoard[i + 12] == 1) {
-            nextBoards[count] = num - (pos0 + pos1 - pos2);
+            nextBoardNums[count] = num - (pos0 + pos1 - pos2);
             count += 1;
         }
         // 1110配置
         if (currentBoard[i] == 1 && currentBoard[i + 4] == 1 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 0) {
-            nextBoards[count] = num - (pos1 + pos2 - pos3);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos3);
             count += 1;
         }
         // 0110配置
         if (currentBoard[i] == 0 && currentBoard[i + 4] == 1 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 0) {
-            nextBoards[count] = num - (pos1 + pos2 - pos3);
-            nextBoards[count + 1] = num - (pos1 + pos2 - pos0);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos3);
+            nextBoardNums[count + 1] = num - (pos1 + pos2 - pos0);
             count += 2;
         }
     }
