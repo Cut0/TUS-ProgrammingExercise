@@ -35,28 +35,24 @@ void print_board(int num);  // cellの内容を表示する関数
 int main() {
     int A[maxN];          //一時的にデータを保存しておくキュー
     Cell Bn[3][maxCell];  //最終的な木
-    Cell leaves[3];       //最小コマ数の時の盤面を保存する用
-    int minpieceCount = 15;  //最小のコマ数を格納する変数
-    /*
-    int initalBoards[16] = {65534, 65533, 65531, 65527, 65519, 65503,
-                            65471, 65407, 65279, 65023, 64511, 63487,
-                            61439, 57343, 49151, 32767};
-                            */
-    int initalBoards[3] = {65534, 65533, 65503};
-    int pieceCounts[16] = {0, 0, 0};
-    int usedPieceCount[16] = {0, 0, 0};
+    Cell lastBoardCell[3];  //最小コマ数の時の盤面を保存する用
+    int initalBoards[16] = {65534, 65503, 65533, 65527, 32767, 61439,
+                            65471, 64511, 65023, 65531, 65407, 65519,
+                            49151, 57343, 65279, 63487};
+    int pieceCounts[3] = {0, 0, 0};
     int i, j;
 
     // Aが空なら終了
     for (j = 0; j < 3; j++) {
         // BFSの初期設定
-        head = 0, tail = 0, minpieceCount = 15;
-        int startDecimal = initalBoards[j];
+        head = 0, tail = 0;
+        int minpieceCount = 15;
+        int startNum = initalBoards[j];
         printf("initial configuration:\n");
-        print_board(startDecimal);
-        enqueue(A, startDecimal);
-        Cell startCell1 = {startDecimal, 0, -1, 1};
-        hash_insert(Bn[j], startCell1);
+        print_board(startNum);
+        enqueue(A, startNum);
+        Cell startCell = {startNum, 0, -1, 1};
+        hash_insert(Bn[j], startCell);
         while (head != tail) {
             int nextBoards[l];
             int currentBoardNum = dequeue(A);
@@ -71,32 +67,54 @@ int main() {
                     enqueue(A, nextBoards[i]);
                     hash_insert(Bn[j], nextCell);
                     if (minpieceCount > pieceCount) {
-                        leaves[j] = nextCell;
+                        lastBoardCell[j] = nextCell;
                         pieceCounts[j] = pieceCount;
                         minpieceCount = pieceCount;
                     }
                 }
             }
         }
-        printf("last board\nvalue = %d, #pieces = %d\n", leaves[j].key,
+        printf("last board\nvalue = %d, #pieces = %d\n", lastBoardCell[j].key,
                pieceCounts[j]);
-        print_board(leaves[j].key);
+        print_board(lastBoardCell[j].key);
         printf("\n");
     }
 
+    //上記で求めた三つの初期配置の最終盤面を回転させたり反転させたりすることで他の初期配置の最終盤面を求めている。
+    int boardNum;
+    for (j = 3; j < 16; j++) {
+        if (j == 3 || j == 6 || j == 9) boardNum = lastBoardCell[j / 3 - 1].key;
+        printf("initial configuration:\n");
+        print_board(initalBoards[j]);
+        if (j >= 9 && j % 2 == 1) {
+            int mirror = mirror_board(boardNum);
+            printf("last board\nvalue = %d, #pieces = %d\n", mirror,
+                   pieceCounts[2]);
+            print_board(mirror);
+        } else {
+            boardNum = rotate_board(boardNum);
+            printf("last board\nvalue = %d, #pieces = %d\n", boardNum,
+                   pieceCounts[0]);
+            print_board(boardNum);
+        }
+        printf("\n");
+    }
+
+    //最初に求めた三つの盤面の最終コマ数に関する手順を表示すれば良い(他の盤面は回転させたり反転させたりしただけで実質同じだから)
+    int usedPiecePos[3] = {0, 0, 0};
     for (i = 0; i < 3; i++) {
-        if (usedPieceCount[pieceCounts[i]] != 1) {
+        if (usedPiecePos[pieceCounts[i]] != 1) {
             printf("last piece count == %d\ntransform sequence (in reverse)\n",
                    pieceCounts[i]);
             while (1) {
-                printf("value = %d, #pieces = %d\n", leaves[i].key,
-                       piece_count(leaves[i].key));
-                print_board(leaves[i].key);
-                if (leaves[i].parent == -1) break;
-                int pos = hash_search(Bn[i], leaves[i].parent);
-                leaves[i] = Bn[i][pos];
+                printf("value = %d, #pieces = %d\n", lastBoardCell[i].key,
+                       piece_count(lastBoardCell[i].key));
+                print_board(lastBoardCell[i].key);
+                if (lastBoardCell[i].parent == -1) break;
+                int pos = hash_search(Bn[i], lastBoardCell[i].parent);
+                lastBoardCell[i] = Bn[i][pos];
             }
-            usedPieceCount[pieceCounts[i]] = 1;
+            usedPiecePos[pieceCounts[i]] = 1;
         }
     }
     return 0;
@@ -191,6 +209,30 @@ int piece_count(int boardNum) {
     for (i = 0; i < l; i++)
         if (board[i] == 1) result += 1;
     return result;
+}
+
+int rotate_board(int num) {
+    int board[16], i;
+    to_binary(num, board);
+    for (i = 0; i < 16; i++) {
+        if (i >= 12)
+            num += board[i] * (powDi[(i - 12) * 4] - powDi[i]);
+        else if (i >= 8)
+            num += board[i] * (powDi[(i - 8) * 4 + 1] - powDi[i]);
+        else if (i >= 4)
+            num += board[i] * (powDi[(i - 4) * 4 + 2] - powDi[i]);
+        else
+            num += board[i] * (powDi[i * 4 + 3] - powDi[i]);
+    }
+    return num;
+}
+
+int mirror_board(int num) {
+    int board[16], i;
+    to_binary(num, board);
+    for (i = 0; i < 16; i++)
+        num += board[i] * (powDi[3 - i + i / 4 * 8] - powDi[i]);
+    return num;
 }
 
 // boardのsizeは16がmax

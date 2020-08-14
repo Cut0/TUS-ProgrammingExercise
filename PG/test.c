@@ -61,12 +61,12 @@ int mirror_board(int num) {
 
 int main() {
     int i;
-    int initalBoards[16] = {65432, 65533, 65531, 65527, 65519, 65503,
-                            65471, 65407, 65279, 65023, 64511, 63487,
-                            61439, 57343, 49151, 32767};
+    int initalBoards[16] = {65534, 65533, 65503, 65527, 32767, 61439,
+                            65471, 64511, 65023, 65531, 65407, 65519,
+                            49151, 57343, 65279, 63487};
     for (i = 0; i < 16; i++) {
+        printf("%d\n", initalBoards[i]);
         print_board(initalBoards[i]);
-        print_board(mirror_board(initalBoards[i]));
     }
     return 0;
 }
