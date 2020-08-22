@@ -40,7 +40,7 @@ int main() {
     int initalBoards[16] = {65534, 65503, 65533, 65527, 32767, 61439,
                             65471, 64511, 65023, 65531, 65407, 65519,
                             49151, 57343, 65279, 63487};
-    int pieceCounts[3] = {0, 0, 0};
+    int pieceCounts[3] = {0, 0, 0};  // 3津の初期配置に対するピースのカウント
     int i, j;
 
     for (j = 0; j < 3; j++) {
@@ -180,6 +180,7 @@ void hash_insert(Cell *B, Cell cell) {
 
 int hash_value(int num) {
     //ハッシュ関数まだ作ってません
+    num %= m;
     return num;
 }
 //-------------------------------------------------------------------------
@@ -187,37 +188,26 @@ int hash_value(int num) {
 void to_binary(int num, int *board) {
     int i, base = 1;
     for (i = 0; i < l; i++) board[i] = 0;
-    int count = 0;
+    int count = 15;
     while (num > 0) {
-        board[count] = (num % 2);
+        board[count] = num % 2;
         num /= 2;
         base *= 10;
-        count += 1;
+        count -= 1;
     }
 }
 
 int piece_count(int boardNum) {
-    int i, result = 0;
-    int board[l];
-    to_binary(boardNum, board);
-    for (i = 0; i < l; i++)
-        if (board[i] == 1) result += 1;
-    return result;
+    int i;
+    for (i = 0; boardNum != 0; i++) boardNum &= boardNum - 1;
+    return i;
 }
 
 int rotate_board(int num) {
     int board[16], i;
     to_binary(num, board);
-    for (i = 0; i < 16; i++) {
-        if (i >= 12)
-            num += board[i] * (powDi[(i - 12) * 4] - powDi[i]);
-        else if (i >= 8)
-            num += board[i] * (powDi[(i - 8) * 4 + 1] - powDi[i]);
-        else if (i >= 4)
-            num += board[i] * (powDi[(i - 4) * 4 + 2] - powDi[i]);
-        else
-            num += board[i] * (powDi[i * 4 + 3] - powDi[i]);
-    }
+    for (i = 0; i < 16; i++)
+        num += board[i] * (powDi[i / 4 + (3 - i % 4) * 4] - powDi[15 - i]);
     return num;
 }
 
@@ -225,7 +215,7 @@ int mirror_board(int num) {
     int board[16], i;
     to_binary(num, board);
     for (i = 0; i < 16; i++)
-        num += board[i] * (powDi[3 - i + i / 4 * 8] - powDi[i]);
+        num += board[i] * (powDi[-12 + i + (15 - i) / 4 * 8] - powDi[15 - i]);
     return num;
 }
 
@@ -238,62 +228,62 @@ int find_next_boards(int num, int *nextBoardNums) {
 
     //横に探索
     for (i = 0; i < 4; i++) {
-        int pos0 = powDi[i * 4];
-        int pos1 = powDi[i * 4 + 1];
-        int pos2 = powDi[i * 4 + 2];
-        int pos3 = powDi[i * 4 + 3];
+        int pos0 = powDi[15 - 4 * i];
+        int pos1 = powDi[14 - 4 * i];
+        int pos2 = powDi[13 - 4 * i];
+        int pos3 = powDi[12 - 4 * i];
         // 0011配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 0 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoardNums[count] = num - (pos1 + pos3);
+            nextBoardNums[count] = num - (pos2 + pos3 - pos1);
             count += 1;
         }
         // 0111配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoardNums[count] = num - (pos0 + pos2);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos0);
             count += 1;
         }
         // 1011配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 0 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
-            nextBoardNums[count] = num - (pos1 + pos3);
+            nextBoardNums[count] = num - (pos2 + pos3 - pos1);
             count += 1;
         }
         // 1100配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 0 && currentBoard[i * 4 + 3] == 0) {
-            nextBoardNums[count] = num + pos0;
+            nextBoardNums[count] = num - (pos0 + pos1 - pos2);
             count += 1;
         }
         // 1101配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 0 && currentBoard[i * 4 + 3] == 1) {
-            nextBoardNums[count] = num + pos0;
+            nextBoardNums[count] = num - (pos0 + pos1 - pos2);
             count += 1;
         }
         // 1110配置
         if (currentBoard[i * 4] == 1 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 0) {
-            nextBoardNums[count] = num + pos1;
+            nextBoardNums[count] = num - (pos1 + pos2 - pos3);
             count += 1;
         }
 
         // 0110配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 1 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 0) {
-            nextBoardNums[count] = num + pos1;
-            nextBoardNums[count + 1] = num - (pos0 + pos2);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos0);
+            nextBoardNums[count] = num - (pos1 + pos2 - pos3);
             count += 2;
         }
     }
     //縦に探索
     for (i = 0; i < 4; i++) {
+        int pos0 = powDi[15 - i];
+        int pos1 = powDi[11 - i];
+        int pos2 = powDi[7 - i];
+        int pos3 = powDi[3 - i];
         // 0011配置
-        int pos0 = powDi[i];
-        int pos1 = powDi[i + 4];
-        int pos2 = powDi[i + 8];
-        int pos3 = powDi[i + 12];
         if (currentBoard[i] == 0 && currentBoard[i + 4] == 0 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 1) {
             nextBoardNums[count] = num - (pos2 + pos3 - pos1);
