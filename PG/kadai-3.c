@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define W 4    /* W = 二進数で表した時のけたの最大長さ */
 #define m 2115 /* m = ハッシュ表のサイズ */
 #define l 16
-#define maxN 3735
-#define maxCell 2115
+#define maxA 500
+#define maxB 2500
 int head = 0, tail = 0;
 int powDi[17] = {
     1,   2,    4,    8,    16,   32,    64,    128,  256,
     512, 1024, 2048, 4096, 8192, 16384, 32768, 65536};  // 2のn乗の配列関数化するよりも高速だった
-int powDeca[5] = {1, 10, 100, 1000,
-                  10000};  // 10のn乗の配列関数化するよりも高速だった
 typedef struct Cell {
     int key;
     int dist;
@@ -34,13 +31,15 @@ int find_next_boards(
 void print_board(int num);  // cellの内容を表示する関数
 
 int main() {
-    int A[maxN];          //一時的にデータを保存しておくキュー
-    Cell Bn[3][maxCell];  //最終的な木
-    Cell lastBoardCell[3];  //最小コマ数の時の盤面を保存する用
     int initalBoards[16] = {65534, 65503, 65533, 65527, 32767, 61439,
                             65471, 64511, 65023, 65531, 65407, 65519,
                             49151, 57343, 65279, 63487};
-    int pieceCounts[3] = {0, 0, 0};  // 3津の初期配置に対するピースのカウント
+    //一時的にデータを保存しておくキュー
+    int A[maxA];
+    //最終的な木
+    Cell Bn[3][maxB];
+    // 3種類の初期配置に対する最小コマ数の盤面
+    Cell lastBoardCell[3];
     int i, j;
 
     for (j = 0; j < 3; j++) {
@@ -48,74 +47,76 @@ int main() {
         head = 0, tail = 0;
         int minpieceCount = 15;
         int startNum = initalBoards[j];
-        printf("initial configuration:\n");
-        print_board(startNum);
         enqueue(A, startNum);
         Cell startCell = {startNum, 0, -1, 1};
         hash_insert(Bn[j], startCell);
         // Aが空なら終了
         while (head != tail) {
+            //次の盤面が全て１０進数で格納される配列
             int nextBoardNums[l];
             int currentBoardNum = dequeue(A);
             //ここで現在のセルの隣接頂点を求める
             int nextCount = find_next_boards(currentBoardNum, nextBoardNums);
             //隣接頂点それぞれに対しBになければAとBにinsertを繰り返す
             for (i = 0; i < nextCount; i++) {
-                int pieceCount = piece_count(nextBoardNums[i]);
-                Cell nextCell = {nextBoardNums[i], 15 - pieceCount,
+                int nextPieceCount = piece_count(nextBoardNums[i]);
+                Cell nextCell = {nextBoardNums[i], 15 - nextPieceCount,
                                  currentBoardNum, 1};
                 if (hash_search(Bn[j], nextBoardNums[i]) == -1) {
                     enqueue(A, nextBoardNums[i]);
                     hash_insert(Bn[j], nextCell);
-                    if (minpieceCount > pieceCount) {
+                    if (minpieceCount > nextPieceCount) {
                         lastBoardCell[j] = nextCell;
-                        pieceCounts[j] = pieceCount;
-                        minpieceCount = pieceCount;
+                        minpieceCount = nextPieceCount;
                     }
                 }
             }
         }
-        printf("last board\nvalue = %d, #pieces = %d\n", lastBoardCell[j].key,
-               pieceCounts[j]);
-        print_board(lastBoardCell[j].key);
-        printf("\n");
     }
 
     //上記で求めた三つの初期配置の最終盤面を回転させたり反転させたりすることで他の初期配置の最終盤面を求めている。
+    Cell board;
     int boardNum;
-    for (j = 3; j < 16; j++) {
-        if (j == 3 || j == 6 || j == 9) boardNum = lastBoardCell[j / 3 - 1].key;
+    for (j = 0; j < 16; j++) {
+        if (j <= 3) {
+            board = lastBoardCell[j];
+            boardNum = board.key;
+        }
+        if (j == 3 || j == 6 || j == 9) {
+            board = lastBoardCell[j / 3 - 1];
+            boardNum = board.key;
+        }
         printf("initial configuration:\n");
         print_board(initalBoards[j]);
         if (j >= 9 && j % 2 == 1) {
             int mirror = mirror_board(boardNum);
             printf("last board\nvalue = %d, #pieces = %d\n", mirror,
-                   pieceCounts[2]);
+                   15 - board.dist);
             print_board(mirror);
-        } else {
+        } else if (j > 3) {
             boardNum = rotate_board(boardNum);
             printf("last board\nvalue = %d, #pieces = %d\n", boardNum,
-                   pieceCounts[0]);
+                   15 - board.dist);
+            print_board(boardNum);
+        } else {
+            printf("last board\nvalue = %d, #pieces = %d\n", boardNum,
+                   15 - board.dist);
             print_board(boardNum);
         }
         printf("\n");
     }
 
     //最初に求めた三つの盤面の最終コマ数に関する手順を表示すれば良い(他の盤面は回転させたり反転させたりしただけで実質同じだから)
-    int usedPiecePos[3] = {0, 0, 0};
     for (i = 0; i < 3; i++) {
-        if (usedPiecePos[pieceCounts[i]] != 1) {
-            printf("last piece count == %d\ntransform sequence (in reverse)\n",
-                   pieceCounts[i]);
-            while (1) {
-                printf("value = %d, #pieces = %d\n", lastBoardCell[i].key,
-                       piece_count(lastBoardCell[i].key));
-                print_board(lastBoardCell[i].key);
-                if (lastBoardCell[i].parent == -1) break;
-                int pos = hash_search(Bn[i], lastBoardCell[i].parent);
-                lastBoardCell[i] = Bn[i][pos];
-            }
-            usedPiecePos[pieceCounts[i]] = 1;
+        printf("last piece count == %d\ntransform sequence (in reverse)\n",
+               15 - lastBoardCell[i].dist);
+        while (1) {
+            printf("value = %d, #pieces = %d\n", lastBoardCell[i].key,
+                   piece_count(lastBoardCell[i].key));
+            print_board(lastBoardCell[i].key);
+            if (lastBoardCell[i].parent == -1) break;
+            int pos = hash_search(Bn[i], lastBoardCell[i].parent);
+            lastBoardCell[i] = Bn[i][pos];
         }
     }
     return 0;
@@ -125,7 +126,7 @@ int main() {
 void enqueue(int *A, int a) {
     A[tail] = a;
     tail += 1;
-    if (tail == maxN) tail = 0;
+    if (tail == maxA) tail = 0;
     if (tail == head) {
         printf("queue overflow\n");
         exit(1);
@@ -140,7 +141,7 @@ int dequeue(int *A) {
         int a = A[head];
         A[head] = -1;
         head += 1;
-        if (head == maxN) head = 0;
+        if (head == maxA) head = 0;
         return a;
     }
 }
@@ -164,9 +165,9 @@ void hash_insert(Cell *B, Cell cell) {
     int x = -1;
     int i = 0;
     while (x == -1 && i < m) {
-        if (B[(h + i) % m].state != 1) {
+        if (B[(h + i) % m].state != 1)
             x = (h + i) % m;
-        } else
+        else
             i += 1;
     }
     if (x == -1) {
