@@ -4,7 +4,7 @@
 #define m 2115 /* m = ハッシュ表のサイズ */
 #define maxA 500
 #define maxB 3000
-int powDi[17] = {
+int PowDi[17] = {
     1,   2,    4,    8,    16,   32,    64,    128,  256,
     512, 1024, 2048, 4096, 8192, 16384, 32768, 65536};  // 2のn乗の配列、関数化するよりも高速だった
 typedef struct Cell {
@@ -28,7 +28,7 @@ int hash_value(int num);
 //次の盤面をnextBoardNumsに入れて盤面の数を返す関数
 int find_next_boards(int currentBoard, int *nextBoardNums);
 // initialBoardNumを基にBFSする最終盤面のセルが返ってくる。
-Cell BFS(Cell *B, int initalBoardNum);
+Cell bfs(Cell *B, int initalBoardNum);
 
 //数値をboard(2進数)に変換する関数
 void to_binary(int num, int *board);
@@ -52,10 +52,10 @@ int main() {
     int lastBoardNums[16];
     int i;
 
-    clock_t start_t = clock();
+    clock_t startT = clock();
     // BFSを使って木を構築した後、ベースとなる3種類の初期配置に対応する最終盤面を求めている
     for (i = 0; i < 3; i++) {
-        lastBoardCell[i] = BFS(Bn[i], initalBoardNums[i * 4]);
+        lastBoardCell[i] = bfs(Bn[i], initalBoardNums[i * 4]);
         lastBoardNums[i * 4] = lastBoardCell[i].key;
     }
 
@@ -70,7 +70,7 @@ int main() {
         lastBoardNums[i] = mirror_board(lastBoardNums[i - 4]);
         initalBoardNums[i] = mirror_board(initalBoardNums[i - 4]);
     }
-    clock_t end_t = clock();
+    clock_t endT = clock();
 
     //それぞれの初期値に対する最終盤面の表示
     for (i = 0; i < 16; i++) {
@@ -95,31 +95,31 @@ int main() {
             lastBoardCell[i] = Bn[i][pos];
         }
     }
-    printf(" time =  %lf\n", (double)(end_t - start_t) / CLOCKS_PER_SEC);
+    printf(" time =  %lf\n", (double)(endT - startT) / CLOCKS_PER_SEC);
     return 0;
 }
 
 //キュー系をまとめた------------------------------------------------------------
-int head = 0, tail = 0;
+int Head = 0, Tail = 0;
 void enqueue(int *A, int a) {
-    A[tail] = a;
-    tail += 1;
-    if (tail == maxA) tail = 0;
-    if (tail == head) {
+    A[Tail] = a;
+    Tail += 1;
+    if (Tail == maxA) Tail = 0;
+    if (Tail == Head) {
         printf("queue overflow\n");
         exit(1);
     }
 }
 
 int dequeue(int *A) {
-    if (head == tail) {
+    if (Head == Tail) {
         printf("queue underflow\n");
         exit(1);
     } else {
-        int a = A[head];
-        A[head] = -1;
-        head += 1;
-        if (head == maxA) head = 0;
+        int a = A[Head];
+        A[Head] = -1;
+        Head += 1;
+        if (Head == maxA) Head = 0;
         return a;
     }
 }
@@ -171,10 +171,10 @@ int find_next_boards(int num, int *nextBoardNums) {
 
     //横に探索
     for (i = 0; i < 4; i++) {
-        int pos0 = powDi[15 - 4 * i];
-        int pos1 = powDi[14 - 4 * i];
-        int pos2 = powDi[13 - 4 * i];
-        int pos3 = powDi[12 - 4 * i];
+        int pos0 = PowDi[15 - 4 * i];
+        int pos1 = PowDi[14 - 4 * i];
+        int pos2 = PowDi[13 - 4 * i];
+        int pos3 = PowDi[12 - 4 * i];
         // 0011配置
         if (currentBoard[i * 4] == 0 && currentBoard[i * 4 + 1] == 0 &&
             currentBoard[i * 4 + 2] == 1 && currentBoard[i * 4 + 3] == 1) {
@@ -222,10 +222,10 @@ int find_next_boards(int num, int *nextBoardNums) {
     }
     //縦に探索
     for (i = 0; i < 4; i++) {
-        int pos0 = powDi[15 - i];
-        int pos1 = powDi[11 - i];
-        int pos2 = powDi[7 - i];
-        int pos3 = powDi[3 - i];
+        int pos0 = PowDi[15 - i];
+        int pos1 = PowDi[11 - i];
+        int pos2 = PowDi[7 - i];
+        int pos3 = PowDi[3 - i];
         // 0011配置
         if (currentBoard[i] == 0 && currentBoard[i + 4] == 0 &&
             currentBoard[i + 8] == 1 && currentBoard[i + 12] == 1) {
@@ -273,21 +273,19 @@ int find_next_boards(int num, int *nextBoardNums) {
     return count;
 }
 
-Cell BFS(Cell *B, int initalBoardNum) {
+Cell bfs(Cell *B, int initalBoardNum) {
     //一時的にデータを保存しておくキュー
     int A[maxA];
-    //最終的な木
-    // 3種類の初期配置に対する最小コマ数の盤面
     Cell lastBoardCell;
     int i;
     // BFSの初期設定
-    head = 0, tail = 0;
+    Head = 0, Tail = 0;
     int minpieceCount = 15;
     enqueue(A, initalBoardNum);
     Cell startCell = {initalBoardNum, 0, -1, 1};
     hash_insert(B, startCell);
     // Aが空なら終了
-    while (head != tail) {
+    while (Head != Tail) {
         //次の盤面が全て１０進数で格納される配列
         int nextBoardNums[16];
         int currentBoardNum = dequeue(A);
@@ -335,7 +333,7 @@ int rotate_board(int num) {
     int board[16], i;
     to_binary(num, board);
     for (i = 0; i < 16; i++)
-        num += board[i] * (powDi[i / 4 + (3 - i % 4) * 4] - powDi[15 - i]);
+        num += board[i] * (PowDi[i / 4 + (3 - i % 4) * 4] - PowDi[15 - i]);
     return num;
 }
 
@@ -343,7 +341,7 @@ int mirror_board(int num) {
     int board[16], i;
     to_binary(num, board);
     for (i = 0; i < 16; i++)
-        num += board[i] * (powDi[-12 + i + (15 - i) / 4 * 8] - powDi[15 - i]);
+        num += board[i] * (PowDi[-12 + i + (15 - i) / 4 * 8] - PowDi[15 - i]);
     return num;
 }
 
