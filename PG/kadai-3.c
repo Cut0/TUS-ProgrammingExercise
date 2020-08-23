@@ -3,7 +3,7 @@
 #define m 2115 /* m = ハッシュ表のサイズ */
 #define l 16
 #define maxA 500
-#define maxB 2500
+#define maxB 2600
 int head = 0, tail = 0;
 int powDi[17] = {
     1,   2,    4,    8,    16,   32,    64,    128,  256,
@@ -29,50 +29,18 @@ int find_next_boards(
     int currentBoard,
     int *nextBoardNums);  //次の盤面をboardに入れて盤面の数を返す関数
 void print_board(int num);  // cellの内容を表示する関数
-
+Cell BFS(Cell *B, int initalBoardNum);
 int main() {
     int initalBoards[16] = {65534, 65503, 65533, 65527, 32767, 61439,
                             65471, 64511, 65023, 65531, 65407, 65519,
                             49151, 57343, 65279, 63487};
-    //一時的にデータを保存しておくキュー
-    int A[maxA];
     //最終的な木
     Cell Bn[3][maxB];
     // 3種類の初期配置に対する最小コマ数の盤面
     Cell lastBoardCell[3];
     int i, j;
 
-    for (j = 0; j < 3; j++) {
-        // BFSの初期設定
-        head = 0, tail = 0;
-        int minpieceCount = 15;
-        int startNum = initalBoards[j];
-        enqueue(A, startNum);
-        Cell startCell = {startNum, 0, -1, 1};
-        hash_insert(Bn[j], startCell);
-        // Aが空なら終了
-        while (head != tail) {
-            //次の盤面が全て１０進数で格納される配列
-            int nextBoardNums[l];
-            int currentBoardNum = dequeue(A);
-            //ここで現在のセルの隣接頂点を求める
-            int nextCount = find_next_boards(currentBoardNum, nextBoardNums);
-            //隣接頂点それぞれに対しBになければAとBにinsertを繰り返す
-            for (i = 0; i < nextCount; i++) {
-                int nextPieceCount = piece_count(nextBoardNums[i]);
-                Cell nextCell = {nextBoardNums[i], 15 - nextPieceCount,
-                                 currentBoardNum, 1};
-                if (hash_search(Bn[j], nextBoardNums[i]) == -1) {
-                    enqueue(A, nextBoardNums[i]);
-                    hash_insert(Bn[j], nextCell);
-                    if (minpieceCount > nextPieceCount) {
-                        lastBoardCell[j] = nextCell;
-                        minpieceCount = nextPieceCount;
-                    }
-                }
-            }
-        }
-    }
+    for (j = 0; j < 3; j++) lastBoardCell[j] = BFS(Bn[j], initalBoards[j]);
 
     //上記で求めた三つの初期配置の最終盤面を回転させたり反転させたりすることで他の初期配置の最終盤面を求めている。
     Cell board;
@@ -342,4 +310,43 @@ void print_board(int num) {
         printf("\n");
     }
     printf("\n");
+}
+
+Cell BFS(Cell *B, int initalBoardNum) {
+    //一時的にデータを保存しておくキュー
+    int A[maxA];
+    //最終的な木
+    // 3種類の初期配置に対する最小コマ数の盤面
+    Cell lastBoardCell;
+    int i;
+    // BFSの初期設定
+    head = 0, tail = 0;
+    int minpieceCount = 15;
+    enqueue(A, initalBoardNum);
+    Cell startCell = {initalBoardNum, 0, -1, 1};
+    hash_insert(B, startCell);
+    // Aが空なら終了
+    while (head != tail) {
+        //次の盤面が全て１０進数で格納される配列
+        int nextBoardNums[l];
+        int currentBoardNum = dequeue(A);
+        //ここで現在のセルの隣接頂点を求める
+        int nextCount = find_next_boards(currentBoardNum, nextBoardNums);
+        //隣接頂点それぞれに対しBになければAとBにinsertを繰り返す
+        int count = 0;
+        for (i = 0; i < nextCount; i++) {
+            int nextPieceCount = piece_count(nextBoardNums[i]);
+            Cell nextCell = {nextBoardNums[i], 15 - nextPieceCount,
+                             currentBoardNum, 1};
+            if (hash_search(B, nextBoardNums[i]) == -1) {
+                enqueue(A, nextBoardNums[i]);
+                hash_insert(B, nextCell);
+                if (minpieceCount > nextPieceCount) {
+                    lastBoardCell = nextCell;
+                    minpieceCount = nextPieceCount;
+                }
+            }
+        }
+    }
+    return lastBoardCell;
 }
