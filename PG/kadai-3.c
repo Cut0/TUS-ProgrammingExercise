@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define m 2115 /* m = ハッシュ表のサイズ */
-#define l 16
 #define maxA 500
-#define maxB 2600
-int head = 0, tail = 0;
+#define maxB 3000
 int powDi[17] = {
     1,   2,    4,    8,    16,   32,    64,    128,  256,
     512, 1024, 2048, 4096, 8192, 16384, 32768, 65536};  // 2のn乗の配列関数化するよりも高速だった
@@ -15,72 +13,79 @@ typedef struct Cell {
     unsigned int state : 1;  // 0が空で，1が既に占有されている
 } Cell;
 
-void enqueue(int *A, int a);  //キューに挿入する関数
-int dequeue(int *A);          //キューの先頭を取り出す関数
-int hash_search(Cell *B,
-                int key);  // keyに一致する要素の場所を返す関数
-void hash_insert(Cell *B, Cell Cell);  // cellを表に挿入する関数
-int hash_value(int num);               //ハッシュ値を返す関数
-void to_binary(int num, int *board);  //数値をboard(2進数)に変換する関数
-int piece_count(int boardNum);  //ボードの値から駒の数を求める関数
-int rotate_board(int num);  //盤面を右に90度回転して結果の数値を返す関数
-int mirror_board(int num);  //盤面を左右で反転させる関数
-int find_next_boards(
-    int currentBoard,
-    int *nextBoardNums);  //次の盤面をboardに入れて盤面の数を返す関数
-void print_board(int num);  // cellの内容を表示する関数
+//キューに挿入する関数
+void enqueue(int *A, int a);
+//キューの先頭を取り出す関数
+int dequeue(int *A);
+
+// keyに一致する要素の場所を返す関数
+int hash_search(Cell *B, int key);
+// cellを表に挿入する関数
+void hash_insert(Cell *B, Cell Cell);
+//ハッシュ値を返す関数
+int hash_value(int num);
+//次の盤面をnextBoardNumsに入れて盤面の数を返す関数
+int find_next_boards(int currentBoard, int *nextBoardNums);
+// initialBoardNumを基にBFSする最終盤面のセルが返ってくる。
 Cell BFS(Cell *B, int initalBoardNum);
+
+//数値をboard(2進数)に変換する関数
+void to_binary(int num, int *board);
+//ボードの値から駒の数を求める関数
+int piece_count(int boardNum);
+//盤面を右に90度回転した結果の数値を返す関数
+int rotate_board(int num);
+//盤面を左右で反転させた結果の数値を返す関数
+int mirror_board(int num);
+// numに対応する盤面を表示する関数
+void print_board(int num);
+
+// lastBoard系統はポインタ渡しで他の関数に渡しちゃダメ、ここの関数内だけで書き換えをする
 int main() {
-    int initalBoards[16] = {65534, 65503, 65533, 65527, 32767, 61439,
-                            65471, 64511, 65023, 65531, 65407, 65519,
-                            49151, 57343, 65279, 63487};
+    int initalBoardNums[16] = {65534, -1, -1, -1, 65503, -1, -1, -1,
+                               65533, -1, -1, -1, -1,    -1, -1, -1};
     //最終的な木
     Cell Bn[3][maxB];
-    // 3種類の初期配置に対する最小コマ数の盤面
+    // 3種類の初期配置に対する最小コマ数の盤面(他の13種類はこれを回転したり反転したりすれば求められる)
     Cell lastBoardCell[3];
-    int i, j;
+    int lastBoardNums[16];
+    int i;
 
-    for (j = 0; j < 3; j++) lastBoardCell[j] = BFS(Bn[j], initalBoards[j]);
+    // BFSを使って木を構築した後、ベースとなる3種類の初期配置に対応する最終盤面を求めている
+    for (i = 0; i < 3; i++) {
+        lastBoardCell[i] = BFS(Bn[i], initalBoardNums[i * 4]);
+        lastBoardNums[i * 4] = lastBoardCell[i].key;
+    }
 
-    //上記で求めた三つの初期配置の最終盤面を回転させたり反転させたりすることで他の初期配置の最終盤面を求めている。
-    Cell board;
-    int boardNum;
-    for (j = 0; j < 16; j++) {
-        if (j <= 3) {
-            board = lastBoardCell[j];
-            boardNum = board.key;
-        }
-        if (j == 3 || j == 6 || j == 9) {
-            board = lastBoardCell[j / 3 - 1];
-            boardNum = board.key;
-        }
+    //回転させて最終盤面を求める
+    for (i = 0; i < 12; i++) {
+        if (i % 4 == 0) continue;
+        lastBoardNums[i] = rotate_board(lastBoardNums[i - 1]);
+        initalBoardNums[i] = rotate_board(initalBoardNums[i - 1]);
+    }
+    //反転させて最終盤面を求める
+    for (i = 12; i < 16; i++) {
+        lastBoardNums[i] = mirror_board(lastBoardNums[i - 4]);
+        initalBoardNums[i] = mirror_board(initalBoardNums[i - 4]);
+    }
+
+    //それぞれの初期値に対する最終盤面の表示
+    for (i = 0; i < 16; i++) {
         printf("initial configuration:\n");
-        print_board(initalBoards[j]);
-        if (j >= 9 && j % 2 == 1) {
-            int mirror = mirror_board(boardNum);
-            printf("last board\nvalue = %d, #pieces = %d\n", mirror,
-                   15 - board.dist);
-            print_board(mirror);
-        } else if (j > 3) {
-            boardNum = rotate_board(boardNum);
-            printf("last board\nvalue = %d, #pieces = %d\n", boardNum,
-                   15 - board.dist);
-            print_board(boardNum);
-        } else {
-            printf("last board\nvalue = %d, #pieces = %d\n", boardNum,
-                   15 - board.dist);
-            print_board(boardNum);
-        }
+        print_board(initalBoardNums[i]);
+        printf("last board\nvalue = %d, #pieces = %d\n", lastBoardNums[i],
+               15 - lastBoardCell[i < 12 ? i / 4 : 2].dist);
+        print_board(lastBoardNums[i]);
         printf("\n");
     }
 
-    //最初に求めた三つの盤面の最終コマ数に関する手順を表示すれば良い(他の盤面は回転させたり反転させたりしただけで実質同じだから)
+    // 3種類の初期値に対する最終盤面の手順を表示
     for (i = 0; i < 3; i++) {
         printf("last piece count == %d\ntransform sequence (in reverse)\n",
                15 - lastBoardCell[i].dist);
         while (1) {
             printf("value = %d, #pieces = %d\n", lastBoardCell[i].key,
-                   piece_count(lastBoardCell[i].key));
+                   15 - lastBoardCell[i].dist);
             print_board(lastBoardCell[i].key);
             if (lastBoardCell[i].parent == -1) break;
             int pos = hash_search(Bn[i], lastBoardCell[i].parent);
@@ -91,6 +96,7 @@ int main() {
 }
 
 //キュー系をまとめた------------------------------------------------------------
+int head = 0, tail = 0;
 void enqueue(int *A, int a) {
     A[tail] = a;
     tail += 1;
@@ -148,43 +154,7 @@ void hash_insert(Cell *B, Cell cell) {
 }
 
 int hash_value(int num) {
-    //ハッシュ関数まだ作ってません
     num %= m;
-    return num;
-}
-//-------------------------------------------------------------------------
-
-void to_binary(int num, int *board) {
-    int i, base = 1;
-    for (i = 0; i < l; i++) board[i] = 0;
-    int count = 15;
-    while (num > 0) {
-        board[count] = num % 2;
-        num /= 2;
-        base *= 10;
-        count -= 1;
-    }
-}
-
-int piece_count(int boardNum) {
-    int i;
-    for (i = 0; boardNum != 0; i++) boardNum &= boardNum - 1;
-    return i;
-}
-
-int rotate_board(int num) {
-    int board[16], i;
-    to_binary(num, board);
-    for (i = 0; i < 16; i++)
-        num += board[i] * (powDi[i / 4 + (3 - i % 4) * 4] - powDi[15 - i]);
-    return num;
-}
-
-int mirror_board(int num) {
-    int board[16], i;
-    to_binary(num, board);
-    for (i = 0; i < 16; i++)
-        num += board[i] * (powDi[-12 + i + (15 - i) / 4 * 8] - powDi[15 - i]);
     return num;
 }
 
@@ -192,7 +162,7 @@ int mirror_board(int num) {
 int find_next_boards(int num, int *nextBoardNums) {
     int count = 0;
     int i = 0;
-    int currentBoard[l];
+    int currentBoard[16];
     to_binary(num, currentBoard);
 
     //横に探索
@@ -299,19 +269,6 @@ int find_next_boards(int num, int *nextBoardNums) {
     return count;
 }
 
-void print_board(int num) {
-    int i, j;
-    int board[l];
-    to_binary(num, board);
-    for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
-            printf("%d ", board[i * 4 + j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
 Cell BFS(Cell *B, int initalBoardNum) {
     //一時的にデータを保存しておくキュー
     int A[maxA];
@@ -328,7 +285,7 @@ Cell BFS(Cell *B, int initalBoardNum) {
     // Aが空なら終了
     while (head != tail) {
         //次の盤面が全て１０進数で格納される配列
-        int nextBoardNums[l];
+        int nextBoardNums[16];
         int currentBoardNum = dequeue(A);
         //ここで現在のセルの隣接頂点を求める
         int nextCount = find_next_boards(currentBoardNum, nextBoardNums);
@@ -349,4 +306,52 @@ Cell BFS(Cell *B, int initalBoardNum) {
         }
     }
     return lastBoardCell;
+}
+//-------------------------------------------------------------------------
+
+void to_binary(int num, int *board) {
+    int i, base = 1;
+    for (i = 0; i < 16; i++) board[i] = 0;
+    int count = 15;
+    while (num > 0) {
+        board[count] = num % 2;
+        num /= 2;
+        base *= 10;
+        count -= 1;
+    }
+}
+
+int piece_count(int boardNum) {
+    int i;
+    for (i = 0; boardNum != 0; i++) boardNum &= boardNum - 1;
+    return i;
+}
+
+int rotate_board(int num) {
+    int board[16], i;
+    to_binary(num, board);
+    for (i = 0; i < 16; i++)
+        num += board[i] * (powDi[i / 4 + (3 - i % 4) * 4] - powDi[15 - i]);
+    return num;
+}
+
+int mirror_board(int num) {
+    int board[16], i;
+    to_binary(num, board);
+    for (i = 0; i < 16; i++)
+        num += board[i] * (powDi[-12 + i + (15 - i) / 4 * 8] - powDi[15 - i]);
+    return num;
+}
+
+void print_board(int num) {
+    int i, j;
+    int board[16];
+    to_binary(num, board);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            printf("%d ", board[i * 4 + j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
