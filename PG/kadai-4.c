@@ -60,7 +60,7 @@ int main() {
     }
 
     //回転させて最終盤面を求める
-    for (i = 0; i < 12; i++) {
+    for (i = 1; i < 12; i++) {
         if (i % 4 == 0) continue;
         lastBoardNums[i] = rotate_board(lastBoardNums[i - 1]);
         initalBoardNums[i] = rotate_board(initalBoardNums[i - 1]);
