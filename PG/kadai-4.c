@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define m 2115 /* m = ハッシュ表のサイズ */
 #define maxA 500
 #define maxB 3000
@@ -51,6 +52,7 @@ int main() {
     int lastBoardNums[16];
     int i;
 
+    clock_t start_t = clock();
     // BFSを使って木を構築した後、ベースとなる3種類の初期配置に対応する最終盤面を求めている
     for (i = 0; i < 3; i++) {
         lastBoardCell[i] = BFS(Bn[i], initalBoardNums[i * 4]);
@@ -68,6 +70,7 @@ int main() {
         lastBoardNums[i] = mirror_board(lastBoardNums[i - 4]);
         initalBoardNums[i] = mirror_board(initalBoardNums[i - 4]);
     }
+    clock_t end_t = clock();
 
     //それぞれの初期値に対する最終盤面の表示
     for (i = 0; i < 16; i++) {
@@ -92,6 +95,7 @@ int main() {
             lastBoardCell[i] = Bn[i][pos];
         }
     }
+    printf(" time =  %lf\n", (double)(end_t - start_t) / CLOCKS_PER_SEC);
     return 0;
 }
 
