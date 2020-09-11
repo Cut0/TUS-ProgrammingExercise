@@ -30,42 +30,9 @@ lastBoardNumsみたいなの
 find_next_boardsみたいなの
 ```
 
-### graphql 定義を生成する
+### 注意点
 
-```
-bin/rake graphql:schema:idl
-```
-
-### ユーザ(User)を生成する
-
-```
-bin/rake debug_user:create\[aaa@gmail.com\]
-
-```
-
-### ダミー決済履歴(Transaction)を生成する
-
-```
-shop_id, user_id, count
-bin/rake debug_transaction:create\[2,2,10\]
-
-```
-
-### 全銀コードを更新する
-
-https://github.com/zengin-code/zengin-rb
-全銀コードはこちらの module で管理しています。下記コマンドで定期的にモジュールのアップデートを行い、データの最新化をしてください。
-
-```
-bundle update  zengin_code
-```
-
-### Postgres Database と postgis 設定
-
-https://qiita.com/mist_dev/items/66c1684e07c2ef2c915e
-
-```
-$ brew install postgresql
-$ brew install postgis
-$ brew services start postgresql
-```
+- 変数のスコープはできるだけ小さくする。
+- 関数の機能は最小限に抑える。複数の機能を持たせない。
+- ネストは 3〜4 重くらいが限度。できるだけ浅くする。
+- 全てを関数化すると機能を辿るのが煩わしくなるため、いい感じにする。

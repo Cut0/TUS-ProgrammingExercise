@@ -43,8 +43,9 @@ void print_board(int num);
 
 // lastBoard系統はポインタ渡しで他の関数に渡しちゃダメ、ここの関数内だけで書き換えをする
 int main() {
-    int initalBoardNums[16] = {65534, -1, -1, -1, 65503, -1, -1, -1,
-                               65533, -1, -1, -1, -1,    -1, -1, -1};
+    int initalBoardNums[16] = {65534, 65527, 32767, 61439, 65503, 65471,
+                               64511, 65023, 65533, 65407, 49151, 65279,
+                               65531, 65519, 57343, 63487};
     //最終的な木
     Cell Bn[3][maxB];
     // 3種類の初期配置に対する最小コマ数の盤面(他の13種類はこれを回転したり反転したりすれば求められる)
@@ -63,13 +64,11 @@ int main() {
     for (i = 1; i < 12; i++) {
         if (i % 4 == 0) continue;
         lastBoardNums[i] = rotate_board(lastBoardNums[i - 1]);
-        initalBoardNums[i] = rotate_board(initalBoardNums[i - 1]);
     }
     //反転させて最終盤面を求める
-    for (i = 12; i < 16; i++) {
+    for (i = 12; i < 16; i++)
         lastBoardNums[i] = mirror_board(lastBoardNums[i - 4]);
-        initalBoardNums[i] = mirror_board(initalBoardNums[i - 4]);
-    }
+
     clock_t endT = clock();
 
     //それぞれの初期値に対する最終盤面の表示
@@ -312,13 +311,12 @@ Cell bfs(Cell *B, int initalBoardNum) {
 //-------------------------------------------------------------------------
 
 void to_binary(int num, int *board) {
-    int i, base = 1;
+    int i;
     for (i = 0; i < 16; i++) board[i] = 0;
     int count = 15;
     while (num > 0) {
         board[count] = num % 2;
         num /= 2;
-        base *= 10;
         count -= 1;
     }
 }
